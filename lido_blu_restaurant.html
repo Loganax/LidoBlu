@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lido Blu - Ristorante di Pesce</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #0277bd, #01579b);
+            color: white;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(2, 119, 189, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: wave 3s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #0288d1, #0277bd);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(2, 136, 209, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(2, 136, 209, 0.4);
+            background: linear-gradient(135deg, #0277bd, #01579b);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #01579b, #263238);
+        }
+
+        /* Menu Sections */
+        .menu-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .menu-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 2.2em;
+            color: #0277bd;
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #0288d1, #0277bd);
+            border-radius: 2px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+        }
+
+        .menu-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: #0288d1;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .item-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #0277bd;
+            flex-grow: 1;
+        }
+
+        .item-price {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #01579b;
+            margin-left: 15px;
+        }
+
+        .item-description {
+            color: #666;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .item-allergens {
+            font-size: 0.9em;
+            color: #d32f2f;
+            background: #ffebee;
+            padding: 5px 10px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(135deg, #263238, #37474f);
+            color: white;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .contact-title {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #81d4fa;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .contact-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .contact-item h3 {
+            color: #81d4fa;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🌊 Lido Blu 🌊</h1>
+            <p>Ristorante di Pesce - Vista Mare</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav">
+            <button class="nav-btn active" onclick="showSection('antipasti')">Antipasti</button>
+            <button class="nav-btn" onclick="showSection('primi')">Primi Piatti</button>
+            <button class="nav-btn" onclick="showSection('secondi')">Secondi Piatti</button>
+            <button class="nav-btn" onclick="showSection('fritture')">Fritture</button>
+            <button class="nav-btn" onclick="showSection('dolci')">Dolci</button>
+        </div>
+
+        <!-- Menu Sections -->
+        <div id="antipasti" class="menu-section active">
+            <h2 class="section-title">🐟 Antipasti di Mare</h2>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Crudo di Ricciola</div>
+                        <div class="item-price">€18,00</div>
+                    </div>
+                    <div class="item-description">Ricciola freschissima con olio extravergine, limone e pepe rosa</div>
+                    <div class="item-allergens">Allergeni: Pesce</div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Antipasto Misto di Mare</div>
+                        <div class="item-price">€22,00</div>
+                    </div>
+                    <div class="item-description">Selezione di crudi, marinati e affumicati del giorno</div>
+                    <div class="item-allergens">Allergeni: Pesce, Molluschi</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Tartare di Tonno</div>
+                        <div class="item-price">€20,00</div>
+                    </div>
+                    <div class="item-description">Tonno rosso con avocado, lime e salsa di soia leggera</div>
+                    <div class="item-allergens">Allergeni: Pesce, Soia</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Crudo di Branzino</div>
+                        <div class="item-price">€16,00</div>
+                    </div>
+                    <div class="item-description">Branzino marinato con agrumi e erbe aromatiche</div>
+                    <div class="item-allergens">Allergeni: Pesce</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="primi" class="menu-section">
+            <h2 class="section-title">🍝 Primi Piatti</h2>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Spaghetti alle Vongole</div>
+                        <div class="item-price">€16,00</div>
+                    </div>
+                    <div class="item-description">Spaghetti con vongole veraci, aglio, olio e prezzemolo</div>
+                    <div class="item-allergens">Allergeni: Glutine, Molluschi</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Risotto ai Frutti di Mare</div>
+                        <div class="item-price">€18,00</div>
+                    </div>
+                    <div class="item-description">Risotto mantecato con gamberi, vongole e cozze</div>
+                    <div class="item-allergens">Allergeni: Crostacei, Molluschi</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Linguine all'Astice</div>
+                        <div class="item-price">€28,00</div>
+                    </div>
+                    <div class="item-description">Linguine con astice fresco e pomodorini del piennolo</div>
+                    <div class="item-allergens">Allergeni: Glutine, Crostacei</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Paccheri con Ricciola e Melanzane</div>
+                        <div class="item-price">€17,00</div>
+                    </div>
+                    <div class="item-description">Paccheri con ricciola, melanzane grigliate e basilico</div>
+                    <div class="item-allergens">Allergeni: Glutine, Pesce</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="secondi" class="menu-section">
+            <h2 class="section-title">🐠 Secondi Piatti</h2>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Branzino in Crosta di Sale</div>
+                        <div class="item-price">€25,00</div>
+                    </div>
+                    <div class="item-description">Branzino fresco cotto in crosta di sale alle erbe</div>
+                    <div class="item-allergens">Allergeni: Pesce</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Grigliata Mista di Pesce</div>
+                        <div class="item-price">€30,00</div>
+                    </div>
+                    <div class="item-description">Selezione di pesci alla griglia con verdure di stagione</div>
+                    <div class="item-allergens">Allergeni: Pesce</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Orata al Forno</div>
+                        <div class="item-price">€22,00</div>
+                    </div>
+                    <div class="item-description">Orata al forno con patate, olive taggiasche e rosmarino</div>
+                    <div class="item-allergens">Allergeni: Pesce</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Tonno alla Griglia</div>
+                        <div class="item-price">€26,00</div>
+                    </div>
+                    <div class="item-description">Tonno fresco grigliato con salsa verde e pomodori confit</div>
+                    <div class="item-allergens">Allergeni: Pesce</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="fritture" class="menu-section">
+            <h2 class="section-title">🍤 Fritture</h2>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Fritto Misto del Golfo</div>
+                        <div class="item-price">€24,00</div>
+                    </div>
+                    <div class="item-description">Calamari, gamberi, triglie e verdure pastellate</div>
+                    <div class="item-allergens">Allergeni: Glutine, Pesce, Crostacei, Molluschi, Uova</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Calamari Fritti</div>
+                        <div class="item-price">€18,00</div>
+                    </div>
+                    <div class="item-description">Anelli di calamaro fresco fritti in pastella leggera</div>
+                    <div class="item-allergens">Allergeni: Glutine, Molluschi, Uova</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Gamberi in Pastella</div>
+                        <div class="item-price">€20,00</div>
+                    </div>
+                    <div class="item-description">Gamberi freschi in pastella croccante con salsa tartara</div>
+                    <div class="item-allergens">Allergeni: Glutine, Crostacei, Uova</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Paranza Fritta</div>
+                        <div class="item-price">€16,00</div>
+                    </div>
+                    <div class="item-description">Pesciolini misti fritti con limone e sale marino</div>
+                    <div class="item-allergens">Allergeni: Glutine, Pesce, Uova</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dolci" class="menu-section">
+            <h2 class="section-title">🍰 Dolci</h2>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Tiramisù al Limoncello</div>
+                        <div class="item-price">€8,00</div>
+                    </div>
+                    <div class="item-description">Tiramisù rivisitato con crema al limoncello</div>
+                    <div class="item-allergens">Allergeni: Glutine, Uova, Latte, Alcool</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Panna Cotta ai Frutti di Bosco</div>
+                        <div class="item-price">€7,00</div>
+                    </div>
+                    <div class="item-description">Panna cotta classica con coulis di frutti di bosco</div>
+                    <div class="item-allergens">Allergeni: Latte</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Cannolo Siciliano</div>
+                        <div class="item-price">€6,00</div>
+                    </div>
+                    <div class="item-description">Cannolo tradizionale con ricotta fresca e pistacchi</div>
+                    <div class="item-allergens">Allergeni: Glutine, Latte, Frutta a Guscio</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-header">
+                        <div class="item-name">Sorbetto al Limone</div>
+                        <div class="item-price">€5,00</div>
+                    </div>
+                    <div class="item-description">Sorbetto artigianale al limone di Sorrento</div>
+                    <div class="item-allergens">Nessun allergene</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="contact-section">
+            <h2 class="contact-title">📍 Contatti</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h3>📍 Indirizzo</h3>
+                    <p>Via del Mare, 123<br>89861 Tropea (VV)<br>Calabria, Italia</p>
+                </div>
+                <div class="contact-item">
+                    <h3>📞 Telefono</h3>
+                    <p>+39 0963 123456</p>
+                </div>
+                <div class="contact-item">
+                    <h3>📧 Email</h3>
+                    <p>info@lidoblu.it</p>
+                </div>
+                <div class="contact-item">
+                    <h3>🕒 Orari</h3>
+                    <p>Lun-Dom: 12:00 - 15:00<br>19:00 - 23:30<br>Martedì chiuso</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.menu-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Add smooth scroll behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to menu items
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
